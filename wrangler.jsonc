@@ -1,0 +1,68 @@
+{
+  // ==========================================================================
+  // Confluence MCP Server - Wrangler Configuration
+  // ==========================================================================
+  //
+  // MULTI-TENANT ARCHITECTURE:
+  // This server supports multiple tenants. Credentials are passed via request
+  // headers, NOT stored as wrangler secrets. This allows a single deployment
+  // to serve multiple customers.
+  //
+  // Required Headers:
+  // - X-Confluence-Domain: Your Atlassian domain (e.g., "your-company" for your-company.atlassian.net)
+  // - X-Confluence-Email: Email for Basic Auth
+  // - X-Confluence-API-Token: API token for Basic Auth
+  // ==========================================================================
+
+  "name": "primrose-mcp-confluence",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // ==========================================================================
+  // Environment Variables (server-wide configuration, not per-tenant)
+  // ==========================================================================
+  "vars": {
+    "CHARACTER_LIMIT": "50000",
+    "DEFAULT_PAGE_SIZE": "25",
+    "MAX_PAGE_SIZE": "250"
+  },
+
+  // ==========================================================================
+  // Multi-Tenant Authentication (via Request Headers)
+  // ==========================================================================
+  //
+  // Tenant credentials are passed via HTTP headers on each request:
+  //
+  // Required:
+  //   X-Confluence-Domain: Atlassian domain (e.g., "your-company" for your-company.atlassian.net)
+  //   X-Confluence-Email: User email for Basic Auth
+  //   X-Confluence-API-Token: API token from id.atlassian.com
+  //
+  // Optional:
+  //   X-Confluence-Cloud-ID: Direct cloud ID (alternative to domain)
+
+  // ==========================================================================
+  // KV Namespace (uncomment for caching)
+  // ==========================================================================
+  // Create: npx wrangler kv namespace create "CONFLUENCE_KV"
+  //
+  // "kv_namespaces": [
+  //   {
+  //     "binding": "CONFLUENCE_KV",
+  //     "id": "<YOUR_KV_NAMESPACE_ID>"
+  //   }
+  // ],
+
+  // ==========================================================================
+  // Development
+  // ==========================================================================
+  "dev": {
+    "port": 8787,
+    "local_protocol": "http"
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}
